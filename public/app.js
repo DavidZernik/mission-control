@@ -435,6 +435,10 @@ function agentLauncher() {
     placeholder: 'First prompt (optional) — sent the moment the instance starts',
     rows: '3',
     oninput: (e) => { f.prompt = e.target.value; },
+    // Dragging the resize handle taller can push the form's foot (and the
+    // box's own lower lines) below the pane — follow the growth so the
+    // Launch row stays in view, with #agent-nav's bottom padding to land in.
+    onresize: () => $('#nav-launch-form')?.scrollIntoView({ block: 'nearest' }),
     onkeydown: (e) => {
       if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) launchNewInstance();
       if (e.key === 'Escape') closeLauncher();

@@ -86,7 +86,10 @@ body {
   cursor: pointer;
 }
 .nav-add:hover { border-color: var(--accent); }
-#agent-nav { flex: 1; min-height: 0; overflow-y: auto; }
+/* Bottom breathing room: the launcher's prompt box is draggable to 220px,
+   and without it a tall box (plus its Launch foot) jams against the pane
+   edge — the padding gives the scroll that space to land in. */
+#agent-nav { flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 16px; }
 .nav-empty { padding: 8px 18px; font-size: 12px; color: var(--text-faint); }
 
 /* Registered agent rows with their instances nested beneath (Round 5). */
