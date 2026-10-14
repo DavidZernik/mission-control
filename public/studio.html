@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>The Common Room · Production</title><link rel="stylesheet" href="/studio.css"></head>
+<body>
+<header><a class="wordmark" href="/studio.html">swey<span>PRODUCTION ROOM</span></a><a class="advanced" href="/">Mission Control ↗</a></header>
+<main>
+<section class="intro"><div><div class="eyebrow">PILOT 001 · IN DEVELOPMENT</div><h1>The Common Room</h1><p>Four hosts. Ten minutes. One show we build together.</p></div><div class="connection" id="connection" role="status">Connecting…</div></section>
+<section class="brief"><strong>The brief</strong><span>A warm, lively news panel. You join as the fifth panelist. Start with a low-cost pilot, then decide what comes next.</span><span class="pill">Research & planning</span></section>
+<div class="workspace"><aside><h2>Your team</h2><div id="team"></div><div class="aside-note">Each agent owns a different part of the show. Your agreed brief is shared with all four. One next question is shown at a time.</div></aside>
+<section class="conversation"><div class="conversation-head"><div><div class="eyebrow">WORKING WITH YOU</div><h2 id="role-name">Video producer</h2><p id="role-job"></p></div><span id="role-status" class="pill"></span></div>
+<div class="tabs"><button id="questions-tab" class="active">Needs your input <span id="count">0</span></button><button id="chat-tab">Conversation</button><button id="decisions-tab">Agreed brief</button></div>
+<div id="content" aria-live="polite"></div>
+<form id="composer"><label for="message">Message this agent</label><div class="compose-row"><textarea id="message" rows="2" maxlength="8000" placeholder="Share an idea, ask a question, or change direction…" required></textarea><button class="primary" type="submit">Send ↗</button></div><p class="hint">Return to send · Shift+Return for a new line. This starts or resumes the agent’s saved session. Media generation is not connected yet. Please keep API keys out of chat.</p></form>
+</section></div>
+<div id="error" role="alert" hidden></div>
+</main><script src="/studio.js"></script></body></html>

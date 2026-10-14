@@ -63,6 +63,8 @@ function sendErr(res, err) {
   res.status(err.status || 500).json({ error: err.message });
 }
 
+require('./lib/studio').mount(app, manager, process.env.MC_ROOT || __dirname, wrap);
+
 // Registered agents (Round 5): definitions the dashboard owns. Seeded from
 // agents.config.js on first boot; edited and removed here from then on.
 app.get('/api/agents', wrap((req, res) => res.json(manager.listAgents())));
@@ -548,7 +550,7 @@ wss.on('connection', (socket) => {
   }));
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, '127.0.0.1', () => {
   console.log(`Mission Control online → http://localhost:${PORT}`);
 });
 

@@ -4,11 +4,12 @@
   "description": "Local mission control dashboard for managing AI agents",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node --test test/*.test.js"
   },
   "dependencies": {
     "express": "^4.19.2",
-    "nodemailer": "^9.1.0",
+    "nodemailer": "^10.1.1",
     "ws": "^8.18.0"
   }
 }
