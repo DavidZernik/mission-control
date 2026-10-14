@@ -16,6 +16,7 @@ function render(force=false){
   $('team').innerHTML=state.roles.map(r=>{const n=state.questions.filter(q=>q.role===r.id&&['open','discussing'].includes(q.status)).length;return `<button class="team-card ${selected===r.id?'selected':''}" data-role="${r.id}"><strong>${esc(r.name)}</strong><span class="${n?'needs':''}">${isWorking(r)?'Working…':n?'Next decision ready':r.runtime?'Ready for your next message':'Ready to start'}</span></button>`}).join('');
   $('role-name').textContent=role.name;$('role-job').textContent=role.job;
   $('role-status').textContent=isWorking(role)?'Working…':pending.length?'Needs your input':'Ready';
+  $('continue-work').disabled=busy||isWorking(role);
   $('count').textContent=pending.length ? 1 : 0;
   for(const t of ['questions','chat','decisions'])$(t+'-tab').classList.toggle('active',tab===t);
   const signature=JSON.stringify([selected,tab,state.messages,state.questions,state.decisions,role.runtime?.state]);
@@ -23,7 +24,7 @@ function render(force=false){
   lastSignature=signature;
   if(tab==='questions')$('content').innerHTML=pending.slice(0,1).map(q=>`<article class="question"><div class="eyebrow">${esc(q.source)}</div><h3>${esc(q.title)}</h3>${q.context?`<p class="question-context">${esc(q.context)}</p>`:''}<div class="choices">${q.options.map(o=>`<button data-question="${esc(q.id)}" data-answer="${esc(o)}">${esc(o)}</button>`).join('')}</div><form data-question-form="${esc(q.id)}"><textarea aria-label="Your answer" placeholder="Or answer in your own words…" maxlength="8000" required></textarea><button class="primary">Reply ↗</button></form></article>`).join('')||`<div class="empty">${isWorking(role)?'Your agent is working on your reply. New questions will appear here.':'No decision needed from you right now. Use the conversation to continue the assigned work.'}</div>`;
   if(tab==='questions'){const work=state.questions.filter(q=>q.role===selected&&['delegated','waiting_on_team'].includes(q.status));if(work.length)$('content').innerHTML+=`<div class="assigned-work"><h3>Next work for this agent</h3>${work.map(q=>`<p>${esc(q.resolution || q.title)}</p>`).join('')}</div>`;}
-  if(tab==='chat')$('content').innerHTML=state.messages.filter(m=>m.role===selected).map(m=>`<article class="message ${m.author}"><div class="message-label">${m.author==='user'?'YOU':esc(role.name.toUpperCase())} · ${new Date(m.createdAt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>${m.question?`<div class="hint">${esc(m.question)}</div>`:''}<div class="message-text">${esc(m.text)}</div></article>`).join('')+(isWorking(role)?'<div class="working">Agent is thinking…</div>':'')||'<div class="empty">Start with a question card or send your own message.</div>';
+  if(tab==='chat')$('content').innerHTML=state.messages.filter(m=>m.role===selected).map(m=>`<article class="message ${m.author}"><div class="message-label">${m.author==='user'?'YOU':m.author==='coordinator'?'ASSIGNED WORK':esc(role.name.toUpperCase())} · ${new Date(m.createdAt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>${m.question?`<div class="hint">${esc(m.question)}</div>`:''}<div class="message-text">${esc(m.text)}</div></article>`).join('')+(isWorking(role)?'<div class="working">Agent is thinking…</div>':'')||'<div class="empty">Start with a question card or send your own message.</div>';
   if(tab==='decisions')$('content').innerHTML=(state.decisions || []).map(q=>`<article class="decision"><div class="eyebrow">${esc(state.roles.find(r=>r.id===q.role)?.name)}</div><strong>${esc(q.title)}</strong><p>${esc(q.answer)}</p></article>`).join('')||'<div class="empty">Your answers will appear here and inform every agent’s next turn.</div>';
 }
 async function refresh(){try{state=await api('/api/studio');render();}catch(e){$('connection').textContent='Disconnected · retrying';}}
@@ -41,3 +42,5 @@ $('composer').addEventListener('keydown', e => {
   $('composer').requestSubmit();
 });
 refresh();setInterval(()=>{if(!busy)refresh();},2500);
+
+$('continue-work').onclick=async()=>{if(busy)return;busy=true;$('continue-work').disabled=true;try{await api('/api/studio/'+selected+'/continue',{});tab='chat';await refresh();render(true);}catch(e){showError(e.message);}finally{busy=false;render(true);}};

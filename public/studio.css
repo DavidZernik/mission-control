@@ -3,3 +3,5 @@
 .question-context{font-size:14px;line-height:1.65;margin:0 0 20px;color:#52675a;max-width:65ch}
 
 .assigned-work{border-top:1px solid #d9ded3;margin-top:18px;padding-top:16px;font-size:13px}.assigned-work h3{font-size:14px}.assigned-work p{margin:12px 0}
+
+#continue-work{display:block;margin-top:8px;font-size:11px;padding:8px 12px}.message.coordinator{border-left:3px solid #b6c7a8;padding-left:14px;color:#607359}
